@@ -39,47 +39,48 @@ module.exports = function(grunt) {
       dev: {
         options: {
           includePaths: ['<%= config.cssSrcDir %>'],
-          sourceMaps: true
+          sourceMaps: true,
+          outputStyle: 'expanded'
         },
         files: {
-          'assets/<%=  config.cssTargetDir %>/style.css': '<%=  config.cssSrcDir %>/style.scss'
+          'assets/<%= config.cssTargetDir %>/style.css': '<%= config.cssSrcDir %>/style.scss'
         }
       },
       dist: {
         options: {
+          sourceMaps: false,
           outputStyle: 'compressed'
         },
         files: {
-          'assets/<%=  config.cssTargetDir %>/style.css': '<%=  config.cssSrcDir %>/style.scss'
+          'assets/<%= config.cssTargetDir %>/style.css': '<%= config.cssSrcDir %>/style.scss'
         }
       }
     },
     postcss: {
       options: {
-        map: true,
+        map: false,
         processors: [
           require('autoprefixer')({
             browsers: ['last 2 versions']
-          })
+          }),
+          require("css-mqpacker"),
+          require('cssnano')()
         ]
       },
-      dev: {
-        src: 'assets/<%=  config.cssTargetDir %>/*.css'
-      },
       dist: {
-        src: 'assets/<%=  config.cssTargetDir %>/*.css'
+        src: 'assets/<%= config.cssTargetDir %>/*.css'
       }
     },
     uglify: {
       js: {
         files: {
-          'assets/<%=  config.jsTargetDir %>/script.js': ['<%=  config.jsSrcDir %>/libs/jquery-*.js', '<%=  config.jsSrcDir %>/**/*.js']
+          'assets/<%= config.jsTargetDir %>/script.js': ['<%= config.jsSrcDir %>/libs/jquery-*.js', '<%= config.jsSrcDir %>/**/*.js']
         }
       }
     },
     watch: {
       css: {
-        files: '<%=  config.cssSrcDir %>/**/*.scss',
+        files: '<%= config.cssSrcDir %>/**/*.scss',
         tasks: ['sass:dev', 'copy:dev', 'postcss:dev']
       }
     },
@@ -99,7 +100,6 @@ module.exports = function(grunt) {
   ]);
   grunt.registerTask('default', [
     'sass:dev',
-    'postcss:dev',
     'copy:dev',
     'uglify',
     'watch'
