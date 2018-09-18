@@ -74,7 +74,7 @@ module.exports = function(grunt) {
     uglify: {
       js: {
         files: {
-          'assets/<%= config.jsTargetDir %>/script.js': ['<%= config.jsSrcDir %>/libs/jquery-*.js', '<%= config.jsSrcDir %>/**/*.js']
+          'assets/<%= config.jsTargetDir %>/script.js': ['<%= config.jsSrcDir %>/*.js']
         }
       }
     },
